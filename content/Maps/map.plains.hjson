@@ -1,0 +1,328 @@
+{
+	$tag: "ctf"
+	$name: "Plains"
+	$desc:
+		'''
+		A cozy plain
+		'''
+	
+	$features:
+	[
+		"A cozy plain, seemingly unremarkable"
+	]
+	
+	entities:
+	[
+		{
+			prefab: "ctf_spawn"
+			faction: "blue"
+			position: [24.80556, 22.41111]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "biome.forest.00"
+			position: [23.08334, -22.89166]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "ctf_flag"
+			faction: "blue"
+			position: [75.625, 31.500]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "ctf_flag"
+			faction: "blue"
+			position: [71.750, 31.500]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "ctf_flag"
+			faction: "red"
+			position: [466.350, 31.48888]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "ctf_flag"
+			faction: "red"
+			position: [469.375, 31.500]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "ctf_spawn"
+			faction: "red"
+			position: [517.375, 22.500]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak"
+			position: [4.666668, 25.11666]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak"
+			position: [9.861113, 25.25555]
+			rotation: -0.017453
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak"
+			position: [148.1666, 35.73333]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak"
+			position: [7.38889, 25.17222]
+			rotation: -0.017453
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak"
+			position: [104.1979, 35.14999]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak"
+			position: [119.9479, 37.41041]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak"
+			position: [133.4375, 35.73333]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak"
+			position: [141.3125, 35.73333]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "market"
+			faction: "blue"
+			position: [17.33333, 22.86111]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "market"
+			faction: "red"
+			position: [525.375, 23.375]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak"
+			position: [535.375, 25.20833]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak"
+			position: [538.7917, 25.33333]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak"
+			position: [531.9167, 25.000]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak"
+			position: [439.7291, 35.27431]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak"
+			position: [423.6319, 37.31944]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak"
+			position: [411.348, 36.26389]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak"
+			position: [402.8376, 36.000]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak"
+			position: [395.1848, 36.26389]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.pine.stump"
+			position: [193.4248, 35.3625]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.pine.stump"
+			position: [382.5376, 36.76875]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.pine.stump"
+			position: [349.6314, 35.26875]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.pine.stump"
+			position: [160.856, 36.58125]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak.dead"
+			position: [233.679, 40.07083]
+			rotation: -0.174533
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak.dead"
+			position: [256.8803, 39.34861]
+			rotation: 0.296706
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak.dead"
+			position: [283.2415, 39.89028]
+			rotation: -0.226893
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak.dead"
+			position: [304.3665, 39.98056]
+			rotation: -0.244346
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak.stump"
+			position: [241.875, 39.875]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak.stump"
+			position: [276.875, 39.125]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "tree.oak.stump"
+			position: [291.875, 39.250]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "wreck.chain_fence.00"
+			position: [264.7662, 37.52084]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "wreck.chain_fence.00"
+			position: [269.375, 37.375]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "wreck.chain_fence.00"
+			position: [274.000, 37.625]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "wreck.chain_fence.01"
+			position: [278.6516, 37.10417]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "wreck.pump.00"
+			position: [260.0683, 37.79375]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "wreck.car"
+			position: [253.3994, 37.730]
+			rotation: 0.000001
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "background.plains"
+			position: [0.000, 20.000]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+			z: 0.000
+			color: "0xffffffff"
+		}
+		{
+			prefab: "background.forest"
+			position: [0.000, 10.000]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+			z: 6.000
+			color: "0xffffffff"
+		}
+		{
+			prefab: "background.hills"
+			position: [0.000, 30.000]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+			z: 1.000
+			color: "0xffffffff"
+		}
+		{
+			prefab: "mine"
+			faction: "blue"
+			position: [62.7375, 32.05836]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "mine"
+			faction: "red"
+			position: [481.0334, 31.65558]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "mine"
+			faction: "null"
+			position: [271.0791, 36.42225]
+			rotation: 0.000
+			scale: [1.000, 1.000]
+		}
+		{
+			prefab: "ctf_manager"
+			position: [267.750, -18.125]
+			rotation: 0.000
+			scale: [14.52222, 10.46667]
+		}
+	]
+}

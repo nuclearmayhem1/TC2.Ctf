@@ -1,0 +1,63 @@
+$tags: ["ctf"]
+
+body:
+{
+	type: static
+	
+	@shape.box:
+	{
+		size: [5.000, 5.000]
+		offset: [0.000, 0.000]
+		friction: 0.500
+		elasticity: 0.500
+		material: wood
+		layer: entity, building, ignore_melee
+		mask: world
+	}
+}
+
+animated.renderer:
+{
+	sprite:
+	{
+		texture: "outpost"
+	}
+	z: -300.000
+	mask: "outpost.mask"
+}
+
+faction.colorable:
+{
+
+}
+
+transform:
+{
+
+}
+
+building:
+{
+
+}
+
+spawn:
+{
+	flags: faction
+}
+
+faction:
+{
+
+}
+
+minimap.marker:
+{
+	sprite:
+	{
+		texture: "ui_icons_minimap"
+		size: [16, 16]
+		frame: [1, 0]
+	}
+	flags: faction
+}

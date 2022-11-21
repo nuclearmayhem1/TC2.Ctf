@@ -1,0 +1,28 @@
+{
+	name: "Materials"
+	desc: ""
+	
+	flags: none
+	character_flags: none
+	origin: "soldier"
+	cost: 10
+	
+	shipment:
+	{
+		name: "Builder"
+		items:
+		[
+			{
+				type: resource
+				material: "wood"
+				quantity: 200
+			}
+			{
+				type: resource
+				material: "stone"
+				quantity: 50
+			}
+		]
+		flags: unpack
+	}
+}

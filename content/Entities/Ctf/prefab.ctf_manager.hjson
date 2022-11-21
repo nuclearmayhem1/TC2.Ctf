@@ -1,0 +1,36 @@
+$tags: []
+
+transform:
+{
+
+}
+
+ctf.ctfmanager:
+{
+	
+}
+
+body:
+{
+	type: kinematic
+	
+	@shape.box:
+	{
+		size: [16.000, 16.000]
+		offset: [0.000, 0.000]
+		friction: 0.500
+		elasticity: 0.500
+		material: none
+		layer: world, bounds, entity
+		mask: world
+	}
+}
+
+animated.renderer:
+{
+	sprite:
+	{
+		texture: "ctf_barrier"
+	}
+	z: -300.000
+}

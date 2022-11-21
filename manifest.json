@@ -1,0 +1,20 @@
+{
+  "version": "0.1.56.0",
+  "guid": "8b22f952-0983-4a02-9a50-cb257c7acacc",
+  "name": "Capture the flag",
+  "description": null,
+  "url": null,
+  "git": null,
+  "authors": [],
+  "dependencies": [
+    {
+      "identifier": "TC2.Core",
+      "required": true
+    },
+    {
+      "identifier": "TC2.Base",
+      "required": true
+    }
+  ],
+  "tags": []
+}

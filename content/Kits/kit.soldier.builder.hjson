@@ -1,0 +1,48 @@
+{
+	name: "Builder"
+	desc: ""
+	
+	flags: none
+	character_flags: none
+	origin: "soldier"
+	cost: 0
+	
+	shipment:
+	{
+		name: "Builder"
+		items:
+		[
+			{
+				type: prefab
+				prefab: "pickaxe"
+				quantity: 1.000
+				flags: despawn
+			}
+			{
+				type: prefab
+				prefab: "axe"
+				quantity: 1.000
+				flags: despawn
+			}
+			{
+				type: prefab
+				prefab: "shovel"
+				quantity: 1.000
+				flags: despawn
+			}
+			{
+				type: prefab
+				prefab: "hammer"
+				quantity: 1.000
+				flags: despawn
+			}
+			{
+				type: prefab
+				prefab: "wrench"
+				quantity: 1.000
+				flags: despawn
+			}
+		]
+		flags: unpack
+	}
+}
