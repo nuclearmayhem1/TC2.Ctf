@@ -44,9 +44,9 @@ public static partial class Ctf
 
 			Constants.World.enable_autosave = false;
 
-			Constants.Respawn.token_count_min = 0f;
+			Constants.Respawn.token_count_min = 10f;
 			Constants.Respawn.token_count_max = 10f;
-			Constants.Respawn.token_count_default = 50f;
+			Constants.Respawn.token_count_default = 10f;
 			Constants.Respawn.token_refill_amount = 0.001f;
 
 			Constants.Respawn.respawn_cooldown_base = 5.00f;

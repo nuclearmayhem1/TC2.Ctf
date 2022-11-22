@@ -1,5 +1,5 @@
 {
-	name: "Knight"
+	name: "Medic"
 	desc: ""
 	
 	flags: none
@@ -9,32 +9,27 @@
 	
 	shipment:
 	{
-		name: "Knight"
+		name: "Medic"
 		items:
 		[
+
 			{
 				type: prefab
-				prefab: "Longsword"
-				quantity: 1.000
-				flags: despawn
-			}
-			{
-				type: prefab
-				prefab: "shield"
-				quantity: 1.000
-				flags: despawn
-			}
-			{
-				type: prefab
-				prefab: "helmet.00"
+				prefab: "helmet.04"
 				quantity: 1.000
 				flags: equip, despawn
 			}
 			{
 				type: prefab
-				prefab: "armor.00"
+				prefab: "knife"
 				quantity: 1.000
-				flags: equip, despawn
+				flags: despawn
+			}
+			{
+				type: prefab
+				prefab: "medkit"
+				quantity: 1.000
+				flags: despawn
 			}
 		]
 		flags: unpack

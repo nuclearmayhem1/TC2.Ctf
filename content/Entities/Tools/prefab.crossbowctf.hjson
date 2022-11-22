@@ -14,32 +14,27 @@ body:
 {
 	@shape.line:
 	{
-		a: [0.000, 0.500]
-		b: [0.000, -0.500]
+		a: [-0.800, 0.000]
+		b: [0.800, 0.000]
 		mass: 5.000
 		radius: 0.250
-		friction: 0.950
-		elasticity: 0.400
+		friction: 0.900
+		elasticity: 0.250
 		material: wood
-		layer: entity, solid, ignore_bullet, ignore_melee, item
+		layer: entity, solid
 		mask: world
 	}
-}
-
-health:
-{
-	max: 500.000
 }
 
 gun:
 {
 	muzzle_offset: [0.000, 0.000]
-	sound_shoot: "bow_shoot"
-	velocity_multiplier: 90.000
-	jitter_multiplier: 0.100
-	damage_multiplier: 1.500
-	recoil_multiplier: 0
-	reload_interval: 1.000
+	sound_shoot: "crossbow_shoot"
+	velocity_multiplier: 130.000
+	jitter_multiplier: 0.070
+	damage_multiplier: 1.850
+	recoil_multiplier: 0.000
+	reload_interval: 2.000
 	cycle_interval: 0.000
 	max_ammo: 1.000
 	projectile_count: 1
@@ -67,7 +62,7 @@ interactable:
 
 holdable:
 {
-	offset: [-0.500, 0.000]
+	offset: [-0.500, 0.200]
 	flags: storable
 }
 
@@ -75,7 +70,7 @@ animated.renderer:
 {
 	sprite:
 	{
-		texture: "bow"
+		texture: "crossbow"
 	}
 }
 

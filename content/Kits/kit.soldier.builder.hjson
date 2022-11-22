@@ -5,7 +5,7 @@
 	flags: none
 	character_flags: none
 	origin: "soldier"
-	cost: 0
+	cost: 10
 	
 	shipment:
 	{
@@ -41,6 +41,11 @@
 				prefab: "wrench"
 				quantity: 1.000
 				flags: despawn
+			}
+			{
+				type: resource
+				material: "wood"
+				quantity: 50
 			}
 		]
 		flags: unpack

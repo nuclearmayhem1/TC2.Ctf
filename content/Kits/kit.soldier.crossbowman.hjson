@@ -1,5 +1,5 @@
 {
-	name: "Archer"
+	name: "Crossbowman"
 	desc: ""
 	
 	flags: none
@@ -14,7 +14,7 @@
 		[
 			{
 				type: prefab
-				prefab: "bowctf"
+				prefab: "crossbowctf"
 				quantity: 1.000
 				flags: despawn
 			}
