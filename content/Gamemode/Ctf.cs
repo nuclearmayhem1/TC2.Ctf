@@ -7,6 +7,9 @@ public static partial class Ctf
 	[IGamemode.Data("Siege", "")]
 	public partial struct Gamemode : IGamemode
 	{
+		public float elapsed = 0;
+
+
 		[IGlobal.Data(false, Net.SendType.Reliable)]
 		public partial struct State : IGlobal
 		{
@@ -17,7 +20,7 @@ public static partial class Ctf
 
 			public State()
 			{
-				
+
 			}
 		}
 
@@ -73,6 +76,8 @@ public static partial class Ctf
 			{
 				if (identifier.Contains("build.headquarters", StringComparison.OrdinalIgnoreCase)) return false;
 				else if (identifier.Contains("build.outpost", StringComparison.OrdinalIgnoreCase)) return false;
+				else if (identifier == "workbench.crossbow") return false;
+				else if (identifier == "workbench.bow") return false;
 				else return true;
 			});
 
@@ -81,31 +86,6 @@ public static partial class Ctf
 			Player.OnCreate += OnPlayerCreate;
 			static void OnPlayerCreate(ref Region.Data region, ref Player.Data player)
 			{
-				var playerCount = region.GetConnectedPlayerCount();
-				int blueCount = 0;
-				int redCount = 0;
-
-                for (uint i = 0; i < playerCount; i++)
-                {
-                    if (region.GetConnectedPlayerByIndex(i).faction_id == "blue")
-                    {
-						blueCount++;
-                    }
-                    else if (region.GetConnectedPlayerByIndex(i).faction_id == "red")
-                    {
-						redCount++;
-                    }
-                }
-
-                if (blueCount > redCount)
-                {
-					player.SetFaction("red");
-				}
-                else
-                {
-					player.SetFaction("blue");
-				}
-
 				if (!player.GetControlledCharacter().IsValid())
 				{
 					var ent_character_soldier = Character.Create(ref region, "Soldier", prefab: "human.male", flags: Character.Flags.Human | Character.Flags.Military, origin: "soldier", gender: Organic.Gender.Male, player_id: player.id, hair_frame: 5, beard_frame: 1);
@@ -119,4 +99,19 @@ public static partial class Ctf
 			App.WriteLine("Ctf Init!", App.Color.Magenta);
 		}
 	}
+
+	[ISystem.VeryLateUpdate(ISystem.Mode.Single)]
+	public static void OnUpdate(ISystem.Info info, [Source.Global] ref Ctf.Gamemode ctf)
+	{
+		ctf.elapsed += info.DeltaTime;
+	}
+
+#if SERVER
+	[ISystem.AddFirst(ISystem.Mode.Single)]
+	public static void OnAdd(ISystem.Info info, [Source.Owned] ref MapCycle.Global mapcycle)
+	{
+		ref var region = ref info.GetRegion();
+		mapcycle.AddMaps(ref region, "ctf");
+	}
+#endif
 }
