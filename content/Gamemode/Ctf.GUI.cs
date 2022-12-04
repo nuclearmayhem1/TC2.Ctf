@@ -19,9 +19,240 @@ public static partial class Ctf
 #endif
 	}
 
+	[IComponent.Data(Net.SendType.Reliable), IComponent.AddTo<Character.Data>]
+	public struct HitTracker : IComponent
+	{
+		public Damage.Type lastDamageType = Damage.Type.None;
+		public Entity attacker = Entity.None;
+		public Entity bodypart = Entity.None;
+		public Entity owner = Entity.None;
+		public Color32BGRA owner_color = Color32BGRA.Grey;
+
+		public HitTracker()
+		{
+
+		}
+	}
+
+
+	[ISystem.Event<Health.DamageEvent>(ISystem.Mode.Single)]
+	public static void OnDie(ISystem.Info info, Entity entity, Entity ent_organic_state, [Source.Shared] ref Character.Data character, [Source.Owned] in Organic.State organic_state,
+		[Source.Shared] ref Ctf.HitTracker hit_tracker, ref Health.DamageEvent data)
+	{
+		if (entity == character.ent_controlled)
+		{
+			hit_tracker.lastDamageType = data.damage_type;
+			hit_tracker.attacker = data.ent_attacker;
+			hit_tracker.bodypart = ent_organic_state;
+			hit_tracker.owner = data.ent_owner;
+            if (data.ent_owner != Entity.None)
+            {
+				var faction = data.ent_owner.GetFaction();
+				ref var faction_data = ref faction.GetData();
+                if (faction_data.IsNotNull())
+                {
+					hit_tracker.owner_color = data.ent_owner.GetFaction().GetData().color_a;
+				}
+			}
+		}
+	}
+
+
+
+	[ISystem.RemoveLast(ISystem.Mode.Single)]
+	public static void OnDie(ISystem.Info info, Entity entity, Entity ent_organic_state, [Source.Shared] ref Character.Data character, [Source.Owned] in Organic.State organic_state, [Source.Global] ref Ctf.Gamemode.State g_ctf_state,
+	[Source.Shared] ref Ctf.HitTracker hit_tracker, [Source.Shared] ref Player.Data player)
+	{
+		if (entity == character.ent_controlled)
+		{
+			var owner_text = new FixedString256("Nobody");
+			if (hit_tracker.owner != Entity.None)
+            {
+				ref var owner = ref hit_tracker.owner.GetComponent<Character.Data>();
+				if (owner.IsNotNull())
+				{
+					ref var owner_player = ref owner.ent_character.GetComponent<Player.Data>();
+					if (owner_player.IsNotNull())
+					{
+						owner_text = new FixedString256(owner_player.GetName());
+					}
+					else
+					{
+						owner_text = new FixedString256(owner.name);
+					}
+				}
+			}
+
+			bool foundSlot = false;
+            for (int i = 0; i < g_ctf_state.killFeed.Length; i++)
+            {
+                if (g_ctf_state.killFeed[i].timestamp <= info.WorldTime - 9.5f)
+                {
+					g_ctf_state.killFeed[i] = new KillFeedKill()
+					{
+						victim = player,
+						bodypart = new FixedString256(hit_tracker.bodypart.GetName()),
+						damage = hit_tracker.lastDamageType,
+						weapon = new FixedString256(hit_tracker.attacker.GetName()),
+						timestamp = info.WorldTime + 10,
+						owner = new FixedString256(owner_text),
+						owner_color = hit_tracker.owner_color,
+					};
+					foundSlot = true;
+					break;
+                }
+            }
+            if (!foundSlot)
+            {
+				g_ctf_state.killFeed[0] = new KillFeedKill()
+				{
+					victim = player,
+					bodypart = new FixedString256(hit_tracker.bodypart.GetName()),
+					damage = hit_tracker.lastDamageType,
+					weapon = new FixedString256(hit_tracker.attacker.GetName()),
+					timestamp = info.WorldTime + 10,
+					owner = new FixedString256(owner_text),
+					owner_color = hit_tracker.owner_color,
+				};
+			}
+			hit_tracker.owner = Entity.None;
+			hit_tracker.bodypart = Entity.None;
+			hit_tracker.attacker = Entity.None;
+			hit_tracker.lastDamageType = Damage.Type.None;
+			hit_tracker.owner_color = Color32BGRA.Grey;
+		}
+	}
+
 
 #if CLIENT
-	public struct ScoreboardGUI : IGUICommand
+
+	public struct GracePeriodCountdownGUI : IGUICommand
+	{
+		public Ctf.Gamemode.State g_ctf_state;
+		public float time;
+
+		public void Draw()
+		{
+			using (var window = GUI.Window.Standalone("Grace timer", position: new Vector2(GUI.CanvasSize.X / 2, GUI.CanvasSize.Y / 16), pivot: new Vector2(0,0), size: new Vector2(200, 16)))
+            {
+                if (window.show)
+                {
+					float timeLeft = g_ctf_state.graceEndTimestamp - time;
+
+					if (timeLeft > 0)
+                    {
+						Color32BGRA timerColor = Color32BGRA.Lerp(Color32BGRA.Red, Color32BGRA.Green, timeLeft / g_ctf_state.graceEndTimestamp);
+
+						GUI.Title($"Grace ends in {timeLeft:0}s", color: timerColor);
+					}
+                    else
+                    {
+						GUI.Title($"Grace ended {Math.Abs(timeLeft):0}s ago", color: Color32BGRA.Yellow);
+					}
+                }
+            }
+		}
+	}
+
+	public struct KillfeedGUI : IGUICommand
+    {
+		public Ctf.Gamemode.State g_ctf_state;
+		public float time;
+		//public static readonly Texture.Handle defaultKillIcon = "ui_deathicon_generic";
+
+		public void Draw()
+        {
+
+			using (var window = GUI.Window.Standalone("Killfeed", position: new Vector2(GUI.CanvasSize.X -460, 10), pivot: new Vector2(0,0), size: new Vector2(450, 400)))
+			{
+                if (window.show)
+                {
+					using (var table = GUI.Table.New("Killfeed.table", 1, size: new Vector2(450, 600)))
+					{
+                        if (table.show)
+                        {
+							table.SetupColumnFixed(400);
+
+							for (int i = 0; i < g_ctf_state.killFeed.Length; i++)
+							{
+								var kill = g_ctf_state.killFeed[i];
+
+								if (kill.timestamp > time)
+								{
+									using (var row = GUI.Table.Row.New(size: new(GUI.GetAvailableWidth(), 32)))
+									{
+										using (row.Column(0))
+										{
+											/*
+											ref var renderer = ref kill.bodypart.GetComponent<Animated.Renderer.Data>();
+											if (renderer.IsNotNull())
+											{
+												GUI.DrawSprite(renderer.sprite.texture, 1);
+												App.WriteLine("drawing bodypart");
+											}
+											else
+											{
+												GUI.DrawSprite(defaultKillIcon, 0.5f);
+												App.WriteLine("drawing default bodypart");
+											}
+
+											GUI.SameLine(10);
+											
+											ref var renderer = ref kill.weapon.GetComponent<Animated.Renderer.Data>();
+											if (renderer.IsNotNull())
+											{
+												GUI.DrawSprite(renderer.sprite.texture, 1);
+												App.WriteLine("drawing weapon");
+											}
+											else
+											{
+												GUI.DrawSprite(defaultKillIcon, 0.5f);
+												App.WriteLine("drawing default weapon");
+											}*/
+
+											GUI.Title(kill.owner, color: kill.owner_color);
+
+											GUI.SameLine(5);
+
+											string weaponText = kill.weapon;
+
+                                            if (weaponText == "0")
+                                            {
+												weaponText = "Nothing";
+                                            }
+
+											weaponText = weaponText.Replace("projectile", "", StringComparison.InvariantCultureIgnoreCase);
+											weaponText = weaponText.Replace(".", " ");
+											weaponText = weaponText.Replace("_", " ");
+
+											GUI.Title(weaponText, color: Color32BGRA.White);
+
+											GUI.SameLine(5);
+
+											ref var faction_data = ref kill.victim.faction_id.GetData();
+                                            if (faction_data.IsNotNull())
+                                            {
+												GUI.Title(kill.victim.GetName(), color: kill.victim.faction_id.GetData().color_a);
+											}
+                                            else
+                                            {
+												GUI.Title(kill.victim.GetName(), color: Color32BGRA.Grey);
+											}
+										};
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+        }
+    }
+
+
+
+
+    public struct ScoreboardGUI : IGUICommand
 	{
 		public Player.Data player;
 		public Ctf.Gamemode gamemode;
@@ -174,17 +405,21 @@ public static partial class Ctf
                                             {
 												int currentCount = GetFactionPlayerCount(ref region, player.faction_id);
 												int newCount = GetFactionPlayerCount(ref region, factions[(int)i].id);
-												using (var button = GUI.Button.New("Join " + factions[(int)i].id, new Vector2(80, 30), currentCount >= newCount && player.faction_id != factions[(int)i].id))
+												using (GUI.ID.Push(factions[(int)i].id))
                                                 {
-                                                    if (button.pressed)
-                                                    {
-														var rpc = new ChangeFactionRPC()
+													using (var button = GUI.Button.New("Join", new Vector2(80, 30), currentCount >= newCount && player.faction_id != factions[(int)i].id))
+													{
+
+														if (button.pressed)
 														{
-															faction = factions[(int)i].id,
-														};
-														rpc.Send(player.ent_player);
+															var rpc = new ChangeFactionRPC()
+															{
+																faction = factions[(int)i].id,
+															};
+															rpc.Send(player.ent_player);
+														}
 													}
-                                                }
+												}
                                             };
 										}
 									}
@@ -233,10 +468,8 @@ public static partial class Ctf
                                         for (uint p = 0; p < player_count; p++)
                                         {
 											var player = queryPlayers[p];
-											App.WriteLine(player.faction_id);
 											if (player.faction_id == factions[i].id)
                                             {
-												App.WriteLine(player);
                                                 faction_players[factions[i]].Add(player);
                                             }
                                         }
@@ -309,6 +542,25 @@ public static partial class Ctf
 				};
 				gui.Submit();
 			}
+            else
+            {
+				if (g_ctf.elapsed - 30f < g_ctf_state.graceEndTimestamp)
+				{
+					var graceCountdown = new GracePeriodCountdownGUI()
+					{
+						g_ctf_state = g_ctf_state,
+						time = g_ctf.elapsed,
+					};
+					graceCountdown.Submit();
+				}
+			}
+
+			var killfeed = new KillfeedGUI()
+			{
+				g_ctf_state = g_ctf_state,
+				time = info.WorldTime,
+			};
+			killfeed.Submit();
 		}
 	}
 #endif

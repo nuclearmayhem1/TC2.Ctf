@@ -8,7 +8,7 @@ public static partial class Ctf
 	public partial struct Gamemode : IGamemode
 	{
 		public float elapsed = 0;
-
+		public bool paused = false;
 
 		[IGlobal.Data(false, Net.SendType.Reliable)]
 		public partial struct State : IGlobal
@@ -17,6 +17,8 @@ public static partial class Ctf
 
 			[Save.Ignore] public IFaction.Handle faction_blue = "blue";
 			[Save.Ignore] public IFaction.Handle faction_red = "red";
+
+			[Save.Ignore] public FixedArray8<KillFeedKill> killFeed = new FixedArray8<KillFeedKill>();
 
 			public State()
 			{
@@ -52,12 +54,13 @@ public static partial class Ctf
 			Constants.Respawn.token_count_default = 10f;
 			Constants.Respawn.token_refill_amount = 0.001f;
 
-			Constants.Respawn.respawn_cooldown_base = 5.00f;
+			Constants.Respawn.respawn_cooldown_base = 10.00f;
 			Constants.Respawn.respawn_cooldown_token_modifier = 0.00f;
 			Constants.Respawn.respawn_cost_base = 0.00f;
 
 			Constants.Characters.allow_custom_characters = false;
 			Constants.Characters.allow_switching = true;
+			Constants.Characters.character_count_max = 1;
 
 			Constants.Equipment.enable_equip = true;
 			Constants.Equipment.enable_unequip = false;
@@ -103,7 +106,10 @@ public static partial class Ctf
 	[ISystem.VeryLateUpdate(ISystem.Mode.Single)]
 	public static void OnUpdate(ISystem.Info info, [Source.Global] ref Ctf.Gamemode ctf)
 	{
-		ctf.elapsed += info.DeltaTime;
+        if (!ctf.paused)
+        {
+			ctf.elapsed += info.DeltaTime;
+		}
 	}
 
 #if SERVER
@@ -114,4 +120,20 @@ public static partial class Ctf
 		mapcycle.AddMaps(ref region, "ctf");
 	}
 #endif
+
+	public struct KillFeedKill
+    {
+		public Player.Data victim = new Player.Data();
+		public FixedString256 weapon = " ";
+		public FixedString256 bodypart = " ";
+		public Damage.Type damage = Damage.Type.None;
+		public float timestamp = -1;
+		public FixedString256 owner = " ";
+		public Color32BGRA owner_color = Color32BGRA.Grey;
+
+        public KillFeedKill()
+        {
+        }
+    }
+
 }

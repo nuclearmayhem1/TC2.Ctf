@@ -30,8 +30,8 @@ public static partial class Ctf
         }
     }
 
-	[ISystem.Update(ISystem.Mode.Single, interval: 5f)]
-	public static void Update2(ISystem.Info info, Entity entity, [Source.Owned] ref Ctf.CtfManager manager, [Source.Owned] ref Animated.Renderer.Data renderer, [Source.Global] in Ctf.Gamemode.State g_state)
+	[ISystem.Update(ISystem.Mode.Single, interval: 2f)]
+	public static void Update2(ISystem.Info info, Entity entity, [Source.Owned] ref Ctf.CtfManager manager, [Source.Owned] ref Animated.Renderer.Data renderer, [Source.Global] in Ctf.Gamemode.State g_state, [Source.Global] in MapCycle.Global mapcycle, [Source.Global] ref MapCycle.Voting voting, [Source.Global] ref Ctf.Gamemode g_gamemode)
 	{
 		var result = GetSpawns(ref info.GetRegion());
         if (result.count < 2 && !manager.restarting)
@@ -43,14 +43,50 @@ public static partial class Ctf
 
         if (manager.nextMapTimestamp < info.WorldTime && manager.restarting)
         {
-			ChangeMap(ref info.GetRegion(), "plains");
+
+			ref var world = ref Server.GetWorld();
+
+			var weights = new FixedArray16<float>();
+
+			ref var votes = ref voting.votes;
+			for (int i = 0; i < votes.Length; i++)
+			{
+				ref var vote = ref votes[i];
+				if (vote.player_id != 0)
+				{
+					weights[vote.map_index] += vote.weight;
+				}
+			}
+
+			var top_index = 0;
+			var top_weight = 0.00f;
+
+			for (int i = 0; i < weights.Length; i++)
+			{
+				var weight = weights[i];
+				if (weight > top_weight)
+				{
+					top_weight = weight;
+					top_index = i;
+				}
+			}
+
+			if (top_index != -1)
+			{
+				var map_name = mapcycle.maps[top_index];
+
+				voting.votes = default;
+				g_gamemode.elapsed = 0.00f;
+
+				ChangeMap(ref info.GetRegion(), map_name.ToString());
+			}
         }
 	}
 
-	[ISystem.Update(ISystem.Mode.Single, interval: 5f)]
-	public static void Update3(ISystem.Info info, Entity entity, [Source.Owned] ref Ctf.CtfManager manager, [Source.Owned] ref Animated.Renderer.Data renderer, [Source.Owned, Pair.Of<Body.Data>] ref Shape.Box box, [Source.Owned] ref Body.Data body, [Source.Global] in Ctf.Gamemode.State g_state)
+	[ISystem.Update(ISystem.Mode.Single, interval: 1f)]
+	public static void Update3(ISystem.Info info, Entity entity, [Source.Owned] ref Ctf.CtfManager manager, [Source.Owned] ref Animated.Renderer.Data renderer, [Source.Owned, Pair.Of<Body.Data>] ref Shape.Box box, [Source.Owned] ref Body.Data body, [Source.Global] in Ctf.Gamemode.State g_ctf_state, [Source.Global] in Ctf.Gamemode g_ctf)
 	{
-		if (info.WorldTime > g_state.graceEndTimestamp && !manager.hasStarted)
+		if (g_ctf.elapsed > g_ctf_state.graceEndTimestamp && !manager.hasStarted)
 		{
 			manager.hasStarted = true;
 			manager.Sync(entity);

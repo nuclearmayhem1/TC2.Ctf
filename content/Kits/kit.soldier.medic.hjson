@@ -12,13 +12,6 @@
 		name: "Medic"
 		items:
 		[
-
-			{
-				type: prefab
-				prefab: "helmet.04"
-				quantity: 1.000
-				flags: equip, despawn
-			}
 			{
 				type: prefab
 				prefab: "knife"
